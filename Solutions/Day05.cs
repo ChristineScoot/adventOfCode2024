@@ -17,9 +17,8 @@ namespace adventOfCode2024.Solutions
             while (!lines[i].Equals(""))
             {
                 var rule = lines[i].Split(new[] { ' ', '|' }, StringSplitOptions.RemoveEmptyEntries);
-                var set = new HashSet<int>();
-                if (rules.ContainsKey(int.Parse(rule[0])))
-                    set = rules[int.Parse(rule[0])];
+                if (!rules.TryGetValue(int.Parse(rule[0]), out var set))
+                    set = new HashSet<int>();
                 set.Add(int.Parse(rule[1]));
                 rules[int.Parse(rule[0])] = set;
                 i++;
