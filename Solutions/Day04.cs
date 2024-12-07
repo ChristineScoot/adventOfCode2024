@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using adventOfCode2024.model;
 
 namespace adventOfCode2024.Solutions
 {
@@ -54,7 +55,7 @@ namespace adventOfCode2024.Solutions
                             xCurrent += direction.X;
                             yCurrent += direction.Y;
                             i++;
-                            if (IsOutOfBounds(xCurrent, yCurrent, charArray[0].Length, charArray.Length))
+                            if (HelperMethods.IsOutOfBounds(xCurrent, yCurrent, charArray[0].Length, charArray.Length))
                                 break;
                             if (word[i] != charArray[yCurrent][xCurrent])
                                 break;
@@ -66,11 +67,6 @@ namespace adventOfCode2024.Solutions
             }
 
             return result;
-        }
-
-        private static bool IsOutOfBounds(int x, int y, int sizeX, int sizeY)
-        {
-            return x < 0 || x >= sizeX || y < 0 || y >= sizeY;
         }
 
         public static int Part2(string file)
