@@ -13,6 +13,7 @@
         <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +47,14 @@
         <Compile Include="Program.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Solutions\Day01.cs" />
+        <Compile Include="Solutions\Day02.cs" />
+        <Compile Include="Solutions\Day03.cs" />
+        <Compile Include="Solutions\Day04.cs" />
+        <Compile Include="Solutions\Day05.cs" />
+        <Compile Include="Solutions\Day06.cs" />
+        <Compile Include="Solutions\Day07.cs" />
+        <Compile Include="Solutions\Day08.cs" />
+        <Compile Include="Solutions\Day09.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="resources\input1_1.txt" />
