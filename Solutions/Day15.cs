@@ -73,7 +73,6 @@ namespace adventOfCode2024.Solutions
             for (var row = 0; row < newLineIndex; row++)
             {
                 _grid[row] = lines[row].ToCharArray();
-                if (!lines[row].Contains("@")) continue;
             }
 
             var currRobotPosition = ScaleTheGrid();
