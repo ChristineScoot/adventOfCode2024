@@ -10,6 +10,7 @@ namespace adventOfCode2024.Solutions
     {
         private static readonly Dictionary<char, Point> Directions = new();
         private static char[][] _grid = [];
+        private static int minWeight;
 
         static Day16()
         {
@@ -75,6 +76,104 @@ namespace adventOfCode2024.Solutions
             }
 
             return currentWeight;
+        }
+
+        public static int Part2(string file)
+        {
+            var lines = File.ReadAllLines(file);
+            _grid = new char[lines.Length][];
+            for (var i = 0; i < lines.Length; i++)
+            {
+                _grid[i] = lines[i].ToCharArray();
+            }
+
+            var start = new Point(1, _grid.Length - 2);
+            var end = new Point(_grid[0].Length - 2, 1);
+            var queue = new Queue<GridState>();
+            var visited = new Dictionary<PointDirection, int>();
+            var shortestPathTiles = new HashSet<Point>();
+
+            queue.Enqueue(new GridState(start, 0, [start], '>'));
+            visited[new PointDirection(start, '>')] = 0;
+
+            var shortestDistance = int.MaxValue;
+            var allShortestPaths = new List<HashSet<Point>>();
+
+            while (queue.Count > 0)
+            {
+                var currentState = queue.Dequeue();
+                var currentPosition = currentState.Position;
+                var currentDistance = currentState.Distance;
+                var currentDirection = currentState.Direction;
+
+                if (currentPosition == end)
+                {
+                    if (currentDistance < shortestDistance)
+                    {
+                        shortestDistance = currentDistance;
+                        allShortestPaths.Clear();
+                        allShortestPaths.Add(currentState.PathTiles);
+                    }
+                    else if (currentDistance == shortestDistance)
+                    {
+                        allShortestPaths.Add(currentState.PathTiles);
+                    }
+
+                    continue;
+                }
+
+                foreach (var kvp in Directions)
+                {
+                    var nextDirection = kvp.Key;
+                    var dir = kvp.Value;
+                    var nextPosition = new Point(currentPosition.X + dir.X, currentPosition.Y + dir.Y);
+                    if (_grid[nextPosition.Y][nextPosition.X] == '#') continue;
+
+                    var nextDistance = currentDistance + 1;
+                    if (nextDirection != currentDirection)
+                    {
+                        nextDistance += 1000;
+                    }
+
+                    if (!visited.ContainsKey(new PointDirection(nextPosition, nextDirection)) ||
+                        visited[new PointDirection(nextPosition, nextDirection)] >= nextDistance)
+                    {
+                        visited[new PointDirection(nextPosition, nextDirection)] = nextDistance;
+                        var newPathTiles = new HashSet<Point>(currentState.PathTiles);
+                        newPathTiles.Add(nextPosition);
+                        queue.Enqueue(new GridState(nextPosition, nextDistance, newPathTiles, nextDirection));
+                    }
+                }
+            }
+
+            foreach (var path in allShortestPaths)
+            {
+                foreach (var tile in path)
+                {
+                    shortestPathTiles.Add(tile);
+                }
+            }
+
+            // foreach (var tile in shortestPathTiles)
+            // {
+            //     if (_grid[tile.Y][tile.X] == '.' || _grid[tile.Y][tile.X] == 'S' || _grid[tile.Y][tile.X] == 'E')
+            //         _grid[tile.Y][tile.X] = 'O';
+            // }
+            // HelperMethods.PrintArray(_grid);
+
+            return shortestPathTiles.Count;
+        }
+    }
+
+    internal record PointDirection()
+    {
+        public Point Point { get; set; }
+        public int Direction { get; set; }
+
+        public PointDirection(Point point, int direction) : this()
+        {
+            Point = point;
+            Direction = direction;
         }
     }
 
@@ -143,6 +242,14 @@ namespace adventOfCode2024.Solutions
     {
         public int Weight { get; } = weight;
         public Point Point { get; } = point;
+        public char Direction { get; } = direction;
+    }
+
+    internal class GridState(Point position, int distance, HashSet<Point> pathTiles, char direction)
+    {
+        public Point Position { get; } = position;
+        public int Distance { get; } = distance;
+        public HashSet<Point> PathTiles { get; } = pathTiles;
         public char Direction { get; } = direction;
     }
 }
