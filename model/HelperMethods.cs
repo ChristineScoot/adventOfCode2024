@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 
 namespace adventOfCode2024.model
 {
@@ -46,6 +47,11 @@ namespace adventOfCode2024.model
         public static bool IsOutOfBounds(int x, int y, int sizeX, int sizeY)
         {
             return x < 0 || x >= sizeX || y < 0 || y >= sizeY;
+        }
+
+        public static bool IsOutOfBounds(Point point, int sizeX, int sizeY)
+        {
+            return point.X < 0 || point.X >= sizeX || point.Y < 0 || point.Y >= sizeY;
         }
     }
 }
