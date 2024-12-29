@@ -44,15 +44,15 @@ namespace adventOfCode2024.Solutions
         public static long Part2(string file, int numOfIterations)
         {
             var initialSecretNumbers = File.ReadAllLines(file).Select(long.Parse).ToList();
-            HashSet<FourSequence> allSequences = [];
-            List<Dictionary<FourSequence, int>> sequencesList = [];
+            Dictionary<FourSequence, long> allSequences = [];
+
             var a = 0;
             var b = 0;
             var c = 0;
             var d = 0;
             foreach (var secret in initialSecretNumbers)
             {
-                Dictionary<FourSequence, int> sequencesToPrice = [];
+                HashSet<FourSequence> visited = [];
                 var nextSecret = secret;
                 var nextPrice = (int)(nextSecret % 10);
                 var prevPrice = nextPrice;
@@ -69,29 +69,13 @@ namespace adventOfCode2024.Solutions
                     d = diff;
                     if (i < 3) continue;
                     var fourSequence = new FourSequence(a, b, c, d);
-                    if (sequencesToPrice.ContainsKey(fourSequence)) continue;
-                    sequencesToPrice.Add(fourSequence, nextPrice);
-                    allSequences.Add(fourSequence);
+                    if (!visited.Add(fourSequence)) continue;
+                    allSequences.TryGetValue(fourSequence, out var price);
+                    allSequences[fourSequence]= price+nextPrice;
                 }
-
-                sequencesList.Add(sequencesToPrice);
             }
-
-            var maxBananas = long.MinValue;
-
-            foreach (var firstSeq in allSequences)
-            {
-                var bananaCount = 0;
-                foreach (var seq in sequencesList)
-                {
-                    if (!seq.TryGetValue(firstSeq, out var price)) continue;
-                    bananaCount += price;
-                }
-
-                maxBananas = Math.Max(maxBananas, bananaCount);
-            }
-
-            return maxBananas;
+            
+            return allSequences.Select(sec => sec.Value).Max();
         }
 
         private record FourSequence()
