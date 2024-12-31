@@ -71,6 +71,7 @@
         <Compile Include="Solutions\Day21.cs" />
         <Compile Include="Solutions\Day22.cs" />
         <Compile Include="Solutions\Day23.cs" />
+        <Compile Include="Solutions\Day24.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="resources\input1_1.txt" />
